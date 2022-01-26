@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const urlApi = 'https://termoapi.azurewebsites.net';
     const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
     const greenLettersToBoard = [];
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // #region Popula palavras com o que ja temos na API
 
     function GetPlayerProgress() {
-        fetch(`https://localhost:44363/World/GetPlayerTodayProgress?ipAdress=${playerIp}`, { method: "GET" })
+        fetch(`${urlApi}/World/GetPlayerTodayProgress?ipAdress=${playerIp}`, { method: "GET" })
             .then((response) => {
                 return response.json();
             })
@@ -200,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function EnviarPalavra(worldSubmit) {
 
-        fetch(`https://localhost:44363/World/ValidateWorld?worldReceived=${worldSubmit}&ipAdress=${playerIp}&playerName=`, { method: "POST" })
+        fetch(`${urlApi}/World/ValidateWorld?worldReceived=${worldSubmit}&ipAdress=${playerIp}&playerName=`, { method: "POST" })
             .then((resp) => {
 
                 if (resp.ok) {
@@ -304,7 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(`https://localhost:44363/World/GetStatistics?ipAdress=${playerIp}`, { method: "GET" })
+        fetch(`${urlApi}/World/GetStatistics?ipAdress=${playerIp}`, { method: "GET" })
             .then((response) => {
                 return response.json();
             })
