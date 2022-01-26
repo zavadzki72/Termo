@@ -286,9 +286,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         $("#stats").show();
                         GetPlayerStats();
                     }, 50);
-                }
 
-                ganhou = true;
+                    ganhou = true;
+                }
 
             })
             .catch(ex => {
