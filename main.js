@@ -246,6 +246,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     }, 50);
 
                     MudaTelcadoVirtual();
+                    ganhou = true;
+
                     return;
                 }
 
@@ -312,7 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((data) => {
 
                 $('#stats_games').text(data.totalGames);
-                $('#stats_pct').text(data.winRate);
+                $('#stats_pct').text(`${data.winRate}%`);
                 $('#stats_streak').text(data.winSequency);
                 $('#stats_maxstreak').text(data.bestSequency);
 
