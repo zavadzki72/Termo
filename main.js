@@ -216,7 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
 
                         if (data.key == 'WORLD_DOES_NOT_EXISTS') {
-                            window.alert(data.message);
+                            Notify("Essa palavra nao está no banco de dados", 1000);
+                            ErrouPalavra();
                         }
 
                         if (data.key == 'PLAYER_NOT_CAN_PLAY') {
@@ -238,6 +239,27 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (!greenLettersToBoard.includes(data.greenLetters[key].toLowerCase())) {
                             greenLettersToBoard.push(data.greenLetters[key].toLowerCase());
                         }
+                    }
+
+                    switch (colunaAtual) {
+                        case 1:
+                            Notify("Explendido", 1000);
+                            break;
+                        case 2:
+                            Notify("Incrível", 1000);
+                            break;
+                        case 3:
+                            Notify("Maravilhoso", 1000);
+                            break;
+                        case 4:
+                            Notify("Muito bem", 1000);
+                            break;
+                        case 5:
+                            Notify("Boa", 1000);
+                            break;
+                        case 6:
+                            Notify("Por pouco", 1000);
+                            break;
                     }
 
                     setTimeout(() => {
@@ -319,6 +341,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 $('#stats_maxstreak').text(data.bestSequency);
 
                 DefinePercentageStats(data);
+
+                var sareText = DefineShareText(data.shareText);
+
+                $('#stats_share').val(sareText);
 
                 DefineTimer();
                 setInterval(DefineTimer, 1000);
@@ -430,11 +456,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         $('#stats_time').text(result);
     }
+
+    function DefineShareText(text) {
+        return text.replaceAll("P", "⬛").replaceAll("A", "🟨").replaceAll("V", "🟩");
+    }
     // #endregion
 
     // #region Modais
 
     document.onclick = function CloseModals(event) {
+
+        if (event.target.id == 'stats_share') {
+            navigator.clipboard.writeText($('#stats_share').val());
+            Notify("copiado para o ctrl+V", 1000);
+            return;
+        }
 
         if (ganhou && !$("#stats").is(':visible') && event.target.id != 'how') {
             $("#help").hide();
@@ -511,5 +547,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
             letterElement.style = `background-color:#3aa394;`;
         }
+    }
+
+    function Notify(msg, time) {
+        var msgElement = document.getElementById("msg");
+        msgElement.innerHTML = msg;
+        msgElement.focus();
+        msgElement.setAttribute("open", "true");
+        Animation(msgElement, "0.25s linear popup forwards");
+        setTimeout(() => {
+            msgElement.style.animation = 'none';
+        }, parseInt(time));
+    }
+
+    function Animation(element, style) {
+        element.style.animation = null;
+        element.getClientRects();
+        element.style.animation = style;
+    }
+
+    function getActualRow() {
+        return document.querySelector("#board .row:nth-child(".concat(colunaAtual, ")"));
+    }
+
+    function ErrouPalavra() {
+        var row = getActualRow();
+        Animation(row, "0.75s ease-in-out rownope");
     }
 });
