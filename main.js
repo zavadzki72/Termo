@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const urlApi = 'https://termoapi.azurewebsites.net';
+    // const urlApi = 'https://localhost:44363';
     const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    const palmeiras = 'palmeiras_nao_tem_mundial';
 
     const greenLettersToBoard = [];
     const yellowLettersToBoard = [];
@@ -11,13 +13,35 @@ document.addEventListener("DOMContentLoaded", () => {
     var atualIndex = 1;
     var playerIp;
     var ganhou = false;
+    var sp;
 
-    GetPlayerIP();
+    Authenticate();
+
+    // #region Autenticacao
+    function Authenticate() {
+        fetch(`${urlApi}/Auth/authorize/${palmeiras}`, { method: "GET" })
+            .then((response) => {
+                return response.text();
+            })
+            .then((data) => {
+                sp = data;
+                GetPlayerIP();
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+    // #endregion
 
     // #region Popula palavras com o que ja temos na API
 
     function GetPlayerProgress() {
-        fetch(`${urlApi}/World/GetPlayerTodayProgress?ipAdress=${playerIp}`, { method: "GET" })
+        fetch(`${urlApi}/World/GetPlayerTodayProgress?ipAdress=${playerIp}`, {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + sp
+                }
+            })
             .then((response) => {
                 return response.json();
             })
@@ -86,6 +110,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         ganhou = true;
                     }
                 }
+            })
+            .then(() => {
+                ShowPage();
             })
             .catch((err) => {
                 console.error(err);
@@ -201,7 +228,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function EnviarPalavra(worldSubmit) {
 
-        fetch(`${urlApi}/World/ValidateWorld?worldReceived=${worldSubmit}&ipAdress=${playerIp}&playerName=`, { method: "POST" })
+        fetch(`${urlApi}/World/ValidateWorld?worldReceived=${worldSubmit}&ipAdress=${playerIp}&playerName=`, {
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + sp
+                }
+            })
             .then((resp) => {
 
                 if (resp.ok) {
@@ -329,7 +361,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(`${urlApi}/World/GetStatistics?ipAdress=${playerIp}`, { method: "GET" })
+        fetch(`${urlApi}/World/GetStatistics?ipAdress=${playerIp}`, {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + sp
+                }
+            })
             .then((response) => {
                 return response.json();
             })
@@ -573,5 +610,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function ErrouPalavra() {
         var row = getActualRow();
         Animation(row, "0.75s ease-in-out rownope");
+    }
+
+    function ShowPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("allPage").style.display = "block";
     }
 });
