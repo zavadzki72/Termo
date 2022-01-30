@@ -663,8 +663,9 @@ main .letter.done {
     grid-template-columns: repeat(32, 1fr);
     grid-template-rows: repeat(3, 33%);
     height: var(--kbd-height);
-    padding: 0 3em 3em;
-    width: 100%
+    padding: 0em 3em 3em;
+    width: 100%;
+    margin-top: 10em;
 }
 
 #kbd button {
@@ -955,12 +956,12 @@ main .letter.done {
     left: 50%;
     top: 50%;
     z-index: 1;
-    width: 120px;
-    height: 120px;
+    width: 40px;
+    height: 40px;
     margin: -76px 0 0 -76px;
-    border: 16px solid #6e5c62;
+    border: 2px solid #6e5c62;
     border-radius: 50%;
-    border-top: 16px solid black;
+    border-top: 2px solid #9e9e9e;
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
 }
@@ -1014,9 +1015,4 @@ main .letter.done {
         bottom: 0;
         opacity: 1
     }
-}
-
-#myDiv {
-    display: none;
-    text-align: center;
 }

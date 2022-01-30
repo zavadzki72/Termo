@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const urlApi = 'https://termoapi.azurewebsites.net';
     // const urlApi = 'https://localhost:44363';
+
     const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
     const palmeiras = 'palmeiras_nao_tem_mundial';
 
@@ -63,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         setTimeout(() => {
                             $("#stats").show();
-                            GetPlayerStats();
+                            GetPlayerStats(false);
                         }, 50);
 
                         MudaTelcadoVirtual();
@@ -104,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (colunaAtual > 6) {
                         setTimeout(() => {
                             $("#stats").show();
-                            GetPlayerStats();
+                            GetPlayerStats(false);
                         }, 50);
 
                         ganhou = true;
@@ -130,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then((data) => {
                 playerIp = data.ip;
+                // playerIp = 12345678;
                 GetPlayerProgress();
             })
             .catch((err) => {
@@ -296,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     setTimeout(() => {
                         $("#stats").show();
-                        GetPlayerStats();
+                        GetPlayerStats(true);
                     }, 50);
 
                     MudaTelcadoVirtual();
@@ -338,9 +340,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 $('#stats_games').text('-')
 
                 if (colunaAtual > 6) {
+                    Notify(data.world, -1);
                     setTimeout(() => {
                         $("#stats").show();
-                        GetPlayerStats();
+                        GetPlayerStats(true);
                     }, 50);
 
                     ganhou = true;
@@ -355,9 +358,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // #endregion
 
     // #region Pega estatisticas do Player
-    function GetPlayerStats() {
+    function GetPlayerStats(acabouDeGanhar) {
 
-        if ($('#stats_games').text() != '-') {
+        if ($('#stats_games').text() != '-' && !acabouDeGanhar) {
             return;
         }
 
@@ -529,7 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
         $("#prestats_button").click(function() {
             setTimeout(() => {
                 $("#stats").show();
-                GetPlayerStats();
+                GetPlayerStats(false);
             }, 50);
         });
     });
@@ -592,9 +595,11 @@ document.addEventListener("DOMContentLoaded", () => {
         msgElement.focus();
         msgElement.setAttribute("open", "true");
         Animation(msgElement, "0.25s linear popup forwards");
-        setTimeout(() => {
-            msgElement.style.animation = 'none';
-        }, parseInt(time));
+        if (time != -1) {
+            setTimeout(() => {
+                msgElement.style.animation = 'none';
+            }, parseInt(time));
+        }
     }
 
     function Animation(element, style) {
