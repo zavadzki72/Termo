@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then((data) => {
                 playerIp = data.ip;
-                // playerIp = 12345678;
+                // playerIp = 12345679;
                 GetPlayerProgress();
             })
             .catch((err) => {
@@ -277,22 +277,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     switch (colunaAtual) {
                         case 1:
-                            Notify("Explendido", 1000);
+                            Notify("Explendido", 5000);
                             break;
                         case 2:
-                            Notify("Incrível", 1000);
+                            Notify("Incrível", 5000);
                             break;
                         case 3:
-                            Notify("Maravilhoso", 1000);
+                            Notify("Maravilhoso", 5000);
                             break;
                         case 4:
-                            Notify("Muito bem", 1000);
+                            Notify("Muito bem", 5000);
                             break;
                         case 5:
-                            Notify("Boa", 1000);
+                            Notify("Boa", 5000);
                             break;
                         case 6:
-                            Notify("Por pouco", 1000);
+                            Notify("Na ultima em", 5000);
                             break;
                     }
 
