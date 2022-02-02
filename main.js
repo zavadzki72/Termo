@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     if (data[dataIndex].isSucces) {
                         for (var key in data[dataIndex].greenLetters) {
-                            PreencheEspacos(true, '#3aa394', key, data[dataIndex].greenLetters, 'letter right');
+                            PreencheEspacos(true, key, data[dataIndex].greenLetters, 'letter right');
                             if (!greenLettersToBoard.includes(data[dataIndex].greenLetters[key].toLowerCase())) {
                                 greenLettersToBoard.push(data[dataIndex].greenLetters[key].toLowerCase());
                             }
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     for (var key in data[dataIndex].yellowLetters) {
-                        PreencheEspacos(true, '#d3ad69', key, data[dataIndex].yellowLetters, 'letter place');
+                        PreencheEspacos(true, key, data[dataIndex].yellowLetters, 'letter place');
 
                         var letra = data[dataIndex].yellowLetters[key].toLowerCase();
 
@@ -83,14 +83,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     for (var key in data[dataIndex].greenLetters) {
-                        PreencheEspacos(true, '#3aa394', key, data[dataIndex].greenLetters, 'letter right');
+                        PreencheEspacos(true, key, data[dataIndex].greenLetters, 'letter right');
                         if (!greenLettersToBoard.includes(data[dataIndex].greenLetters[key].toLowerCase())) {
                             greenLettersToBoard.push(data[dataIndex].greenLetters[key].toLowerCase());
                         }
                     }
 
                     for (var key in data[dataIndex].blackLetters) {
-                        PreencheEspacos(true, '#312a2c', key, data[dataIndex].blackLetters, 'letter wrong');
+                        PreencheEspacos(true, key, data[dataIndex].blackLetters, 'letter wrong');
 
                         var letra = data[dataIndex].blackLetters[key].toLowerCase();
 
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then((data) => {
                 playerIp = data.ip;
-                // playerIp = 12345679;
+                // playerIp = 12345611;
                 GetPlayerProgress();
             })
             .catch((err) => {
@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((data) => {
                 if (data.isSucces) {
                     for (var key in data.greenLetters) {
-                        PreencheEspacos(false, '#3aa394', key, data.greenLetters, 'letter right');
+                        PreencheEspacos(false, key, data.greenLetters, 'letter right');
                         if (!greenLettersToBoard.includes(data.greenLetters[key].toLowerCase())) {
                             greenLettersToBoard.push(data.greenLetters[key].toLowerCase());
                         }
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 for (var key in data.yellowLetters) {
-                    PreencheEspacos(true, '#d3ad69', key, data.yellowLetters, 'letter place');
+                    PreencheEspacos(true, key, data.yellowLetters, 'letter place');
 
                     var letra = data.yellowLetters[key].toLowerCase();
 
@@ -318,14 +318,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 for (var key in data.greenLetters) {
-                    PreencheEspacos(true, '#3aa394', key, data.greenLetters, 'letter right');
+                    PreencheEspacos(true, key, data.greenLetters, 'letter right');
                     if (!greenLettersToBoard.includes(data.greenLetters[key].toLowerCase())) {
                         greenLettersToBoard.push(data.greenLetters[key].toLowerCase());
                     }
                 }
 
                 for (var key in data.blackLetters) {
-                    PreencheEspacos(true, '#312a2c', key, data.blackLetters, 'letter wrong');
+                    PreencheEspacos(true, key, data.blackLetters, 'letter wrong');
 
                     var letra = data.blackLetters[key].toLowerCase();
 
@@ -512,19 +512,47 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if (ganhou && !$("#stats").is(':visible') && event.target.id != 'how') {
+        var elementDivConfig = document.getElementById('config');
+        if (event.composedPath().includes(elementDivConfig)) {
+            return;
+        }
+
+        if ($("#help").is(':visible') || $("#config").is(':visible') || $("#stats").is(':visible')) {
             $("#help").hide();
+            $("#stats").hide();
+            $("#config").hide();
+            return;
+        }
+
+        if (ganhou && !$("#stats").is(':visible') && event.target.id != 'how' && event.target.id != 'config_img') {
+            $("#help").hide();
+            $("#config").hide();
             $("#stats").show();
             return;
         }
 
         $("#help").hide();
         $("#stats").hide();
+        $("#config").hide();
     }
+
+    $("#config_contrast").change(function() {
+        if (this.checked) {
+            document.body.className = 'high';
+        } else {
+            document.body.className = '';
+        }
+    });
 
     $(document).ready(function() {
         $("#how").click(function() {
             setTimeout(() => $("#help").show(), 50);
+        });
+    });
+
+    $(document).ready(function() {
+        $("#config_button").click(function() {
+            setTimeout(() => $("#config").show(), 50);
         });
     });
 
@@ -538,13 +566,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     // #endregion
 
-    function PreencheEspacos(putLetters, color, key, listLetras, animation) {
+    function PreencheEspacos(putLetters, key, listLetras, animation) {
 
         const index = parseInt(key);
         var id = `${colunaAtual}-${index}`;
         const letterElement = document.getElementById(id);
         letterElement.className = animation;
-        letterElement.style = `background-color:${color};border-color:#fafaff`;
         if (putLetters) {
             letterElement.innerHTML = listLetras[key];
         }
@@ -561,7 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return
             }
 
-            letterElement.style = `background-color:#312a2c; color: #504a4b;`;
+            letterElement.className = 'wrong';
         }
 
         for (var key in yellowLettersToBoard) {
@@ -573,7 +600,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return
             }
 
-            letterElement.style = `background-color:#d3ad69;`;
+            letterElement.className = 'place';
         }
 
         for (var key in greenLettersToBoard) {
@@ -585,7 +612,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return
             }
 
-            letterElement.style = `background-color:#3aa394;`;
+            letterElement.className = 'right';
         }
     }
 

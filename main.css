@@ -187,6 +187,18 @@ template {
     --letter-gap: calc(var(--letter-size)/8)
 }
 
+body {
+    --colorRight: #3aa394;
+    --colorPlace: #d3ad69;
+    --colorWrong: #312a2c;
+    --colorWrongFG: #504a4b
+}
+
+body.high {
+    --colorRight: #e36322;
+    --colorPlace: #0197f6
+}
+
 html {
     background-color: #6e5c62;
     font-size: min(var(--max-size)/100, 100vw/100);
@@ -233,10 +245,11 @@ a {
 }
 
 header {
+    grid-gap: 0 .5vh;
     box-sizing: border-box;
     display: grid;
     flex-shrink: 0;
-    grid-template-columns: 3vh 1fr 3vh;
+    grid-template-columns: 6.5vh 1fr 3vh 3vh;
     height: 6vh;
     max-width: 720px;
     padding: 1.5vh;
@@ -250,8 +263,9 @@ header #how {
     text-align: center
 }
 
-header #how,
-header #prestats_button {
+#config_button,
+#prestats_button,
+header #how {
     align-items: center;
     background-color: transparent;
     border: 2px solid #b7aeb4;
@@ -265,7 +279,7 @@ header #prestats_button {
     z-index: 1000
 }
 
-header #prestats_button img {
+header img {
     height: 3vh;
     width: 3vh
 }
@@ -443,6 +457,7 @@ main .letter {
     background-color: #615458;
     border-radius: 10%;
     box-sizing: border-box;
+    cursor: pointer;
     display: inline-block;
     display: flex;
     font-size: var(--letter-font);
@@ -615,38 +630,40 @@ main .letter.empty {
 }
 
 main .letter.right {
-    --color: #3aa394;
+    --color: var(--colorRight)
+}
+
+main .letter.place,
+main .letter.right {
     -webkit-animation: flip .5s linear 0s forwards;
     animation: flip .5s linear 0s forwards
 }
 
 main .letter.place {
-    --color: #d3ad69;
-    -webkit-animation: flip .5s linear 0s forwards;
-    animation: flip .5s linear 0s forwards
+    --color: var(--colorPlace)
 }
 
 main .letter.wrong {
-    --color: #312a2c;
+    --color: var(--colorWrong);
     -webkit-animation: flip .5s linear 0s forwards;
     animation: flip .5s linear 0s forwards
 }
 
 main .letter.done {
-    background-color: #3aa394
+    background-color: var(--colorRight);
 }
 
 #kbd .right {
-    background-color: #3aa394!important
+    background-color: var(--colorRight)!important
 }
 
 #kbd .place {
-    background-color: #d3ad69
+    background-color: var(--colorPlace)
 }
 
 #kbd .wrong {
-    background-color: #312a2c;
-    color: #504a4b
+    background-color: var(--colorWrong);
+    color: var(--colorWrongFG)
 }
 
 #kbd .place,
@@ -703,6 +720,7 @@ main .letter.done {
 #modal {
     align-items: center;
     display: flex;
+    flex-direction: column;
     height: 92vh;
     justify-content: center;
     left: calc((100vw - min(var(--max-size), calc(100vw - 4vh)))/2);
@@ -713,6 +731,7 @@ main .letter.done {
     width: calc(100vw - 4vh)
 }
 
+#config,
 #help,
 #stats {
     -webkit-backdrop-filter: blur(10px);
@@ -729,9 +748,72 @@ main .letter.done {
     z-index: 1000
 }
 
+#config {
+    grid-gap: 1em 0;
+    align-items: center;
+    font-size: 3em;
+    font-weight: 300;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: repeat(auto, 1fr);
+    line-height: 1.35em;
+    padding: 1.7em 2em;
+}
+
+#config p {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+#p_menor {
+    color: #f2e8c4;
+    font-size: 20px;
+    font-style: italic;
+}
+
+#config div {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+#config p i {
+    color: #9f9e9e;
+    display: block;
+    font-size: .75em;
+    line-height: 1em;
+    margin: 0
+}
+
+#config span {
+    text-align: right
+}
+
+#config .s2 {
+    grid-column: 1/span 2
+}
+
+#config label {
+    cursor: pointer
+}
+
+#config_version {
+    color: #9f9e9e;
+    font-size: .75em;
+    font-weight: 300;
+    -webkit-user-select: all;
+    -moz-user-select: all;
+    user-select: all;
+}
+
 #help.show,
 #stats.show {
     display: block
+}
+
+#config.show {
+    display: grid
 }
 
 #help {
@@ -786,12 +868,12 @@ main .letter.done {
 }
 
 #help .letter.right {
-    background-color: #3aa394;
+    background-color: var(--colorRight);
     border: none
 }
 
 #help .letter.place {
-    background-color: #d3ad69;
+    background-color: var(--colorPlace);
     border: none
 }
 
@@ -799,12 +881,6 @@ main .letter.done {
     background-color: #191516;
     border: none;
     color: #5e5c5c
-}
-
-#help hr {
-    border: 1px solid #504a4c;
-    margin: 5em auto;
-    width: 80%
 }
 
 #help p b {
@@ -1015,4 +1091,42 @@ main .letter.done {
         bottom: 0;
         opacity: 1
     }
+}
+
+input[type=checkbox] {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    outline: 0
+}
+
+input.toggle {
+    aspect-ratio: 53/32;
+    background-color: #312a2d;
+    border: .1em solid #fafaff;
+    border-radius: 1em;
+    display: inline-block;
+    height: 1.75em;
+    margin: 0;
+    position: relative
+}
+
+input.toggle:after {
+    aspect-ratio: 1;
+    background-color: transparent;
+    border: .1em solid #fafaff;
+    border-radius: 50%;
+    content: "";
+    height: 1.2em;
+    left: .1em;
+    position: absolute;
+    top: .075em;
+    transition: all .5s cubic-bezier(.68, -.55, .265, 1.55)
+}
+
+input.toggle:checked:after {
+    background-color: #fafaff;
+    transform: translatex(1.05em)
 }
